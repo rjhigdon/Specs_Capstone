@@ -13,17 +13,18 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(25), unique=True, nullable=False)
     password = db.Column(db.String(25), nullable=False)
-    
+
     def __repr__(self):
         return f"<User {self.user_id} exists with the username {self.username}>"
     
 class Project(db.Model):
     
     __tablename__ = "projects"
-    
-    project_id = db.Comun(db.Integer, primary_key=True, autoincrement=True)
+    project_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(40), nullable=False)
     description = db.Column(db.String(400))
+    
+    user = db.relationship("User", backref="projects", lazy)
     
     def __repr__(self):
         return f"<Project:{self.project_id} is named: {self.name}>"
@@ -31,6 +32,7 @@ class Project(db.Model):
 class Task(db.Model):
     
     __tablename__ = "tasks"
+
     
     task_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(40), nullable=False)
@@ -39,7 +41,6 @@ class Task(db.Model):
     
     def __repr__(self):
         return f"<Task:{self.task_id} is named: {self.name} and has a status of {self.status}>"
-
 def connect_to_db(flask_app, db_uri=os.environ["POSTGRES_URI"], echo=False):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo
