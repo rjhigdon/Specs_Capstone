@@ -24,7 +24,7 @@ class Project(db.Model):
     name = db.Column(db.String(40), nullable=False)
     description = db.Column(db.String(400))
     
-    user = db.relationship("User", backref="projects", lazy)
+    user = db.relationship("User", backref="projects", lazy = False)
     
     def __repr__(self):
         return f"<Project:{self.project_id} is named: {self.name}>"
