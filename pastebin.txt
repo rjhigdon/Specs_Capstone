@@ -1,0 +1,4 @@
+wiht app.app_context():
+    user1 = User(username = "haha", password = "hehe")
+    User.query.add(user1)
+    User.query.commit()

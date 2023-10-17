@@ -18,5 +18,5 @@ with model.session.app.app_context():
         password = "test_pw"
 
     user = create_user(username, password)
-    
+    model.db.session.add(user)
     
