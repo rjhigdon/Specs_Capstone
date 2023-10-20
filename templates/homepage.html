@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Home page{% endblock %}
+{% block head %}Kanban Task App{% endblock %}
+
+{% block body %}
+
+<div id="desc1">
+   <img src="static\underConstruction.png" alt="under_construction" width="600" height="300">
+   <p>
+       Kanban helps reduce your projects and daily to-do's into manageable bite-sized portions, placing categories on each to more esily minimize the number of concurrent tasks, and seeing which have been completed already
+    </p>
+</div>
+<div id="desc2">
+    <img src="static\underConstruction.png" alt="under_construction" width="600" height="300">
+    <p>
+        Built with a simple but clean user interface to maximize productivity and planning, but reduce complications and over-planning
+    </p>
+</div>
+
+<a href="{{url_for('login') }}">Log In</a>
+<a href="{{ url_for('register') }}">Dont have an account? Sign Up</a>
+
+
+
+
+{% endblock %}

@@ -3,14 +3,17 @@ from random import choice, randint
 
 import model
 import server
-from crud import create_user, create_project, create_task
+from crud import create_user
 
-os.system("dropdb KanbanApp")
+if os.system("dropdb --if-exists KanbanApp") == 0:
+    print("Database 'KanbanApp' dropped successfully")
+else:
+    print("Database 'KanbanApp' does not exist")
 os.system("createdb KanbanApp")
 
 model.connect_to_db(server.app)
 
-with model.session.app.app_context():
+with server.app.app_context():
     model.db.create_all()
     
     for n in range(10):

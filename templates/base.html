@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello</title>
-</head>
-<body>
-    
     <title>
         {% block title %}{% endblock %}
       </title>
+</head>
+<body>
   
       {% block head %}{% endblock %}
     </head>
@@ -20,7 +18,7 @@
         </p>
       {% endfor %}
       {% block body %}{% endblock %}
-  
+      {% block content %}{% endblock %}
       {% block after_body %}{% endblock %}
 </body>
 </html>
