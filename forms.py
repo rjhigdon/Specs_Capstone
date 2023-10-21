@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Length, ValidationError
-from model import User
+from wtforms import StringField, PasswordField, SubmitField, SelectField
+from wtforms.validators import DataRequired, ValidationError
+from model import User, Project, Task
 
 class RegisterForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired(), Length(min=4, max=25)] )
-    password = PasswordField("Password", validators=[DataRequired(), Length(min=4, max=25)])
+    username = StringField("Username", validators=[DataRequired()])
+    password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
     def user_validate(self, username):
@@ -17,8 +17,8 @@ class RegisterForm(FlaskForm):
             )
             
 class LoginForm(FlaskForm):
-    username = StringField("Username:", validators=[DataRequired(), Length(min=4, max=25)])
-    password = PasswordField("Password:", validators=[DataRequired(), Length(min=4, max=25)])
+    username = StringField("Username:", validators=[DataRequired()])
+    password = PasswordField("Password:", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
     def user_validate(self, username):
@@ -30,7 +30,20 @@ class LoginForm(FlaskForm):
             )
 
 class ProjectForm(FlaskForm):
-    pass
+    project_name = StringField("Name:", validators=[DataRequired()])
+    project_description = StringField("Description:")
+    submit=SubmitField("Submit")
+    
+    def project_validate(self, project_name):
+        project_checker = Project.query.filter_by(project_name = project_name.data).first()
+        
+        if project_checker:
+            raise ValidationError(
+                "This project name already exists. Use another"
+            )
 
 class TaskForm(FlaskForm):
-    pass
+    task_name = StringField("Name:")
+    description = StringField("description")
+    status = SelectField("status", choices=[('Backlog', 'Backlog'), ('To-Do', 'To-Do'), ('In-Progress', 'In-Progress'), ('Done', 'Done')])
+    

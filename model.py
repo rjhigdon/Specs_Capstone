@@ -1,12 +1,12 @@
 import os
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
 """ Users Table """
 
-class User(db.Model):
+class User(db.Model, UserMixin):
 
     __tablename__ = "users"
 
@@ -14,20 +14,24 @@ class User(db.Model):
     username = db.Column(db.String(25), unique=True, nullable=False)
     password = db.Column(db.String(25), nullable=False)
     
-    projects = db.relationship("Project", backref="users")
-
+    projects = db.relationship("Project", backref="user", lazy=False)
+    
+    def get_id(self):
+        return self.user_id
+    
     def __repr__(self):
         return f"<User {self.user_id} exists with the username {self.username}>"
     
 class Project(db.Model):
     
     __tablename__ = "projects"
-    project_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(40), nullable=False)
-    description = db.Column(db.String(400))
-    user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
     
-    tasks = db.relationship("Project", backref="projects", lazy= False)
+    project_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    project_name = db.Column(db.String(40), nullable=False)
+    project_description = db.Column(db.String(400))
+    user_id = db.Column(db.Integer(), db.ForeignKey("users.user_id"), nullable =False)
+    
+    tasks = db.relationship("Task",  backref="project", lazy=False)
     
     def __repr__(self):
         return f"<Project:{self.project_id} is named: {self.name}>"
@@ -37,10 +41,11 @@ class Task(db.Model):
     __tablename__ = "tasks"
 
     task_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(40), nullable=False)
-    description = db.Column(db.String(400))
+    task_name = db.Column(db.String(40), nullable=False)
+    task_description = db.Column(db.String(400))
     status = db.Column(db.String)
-    project_id = db.Column(db.Integer, db.ForeignKey("projects.project_id"))
+    project_id= db.Column(db.Integer(), db.ForeignKey("projects.project_id"), nullable=False)    
+    
     
     
     def __repr__(self):
@@ -55,6 +60,9 @@ def connect_to_db(flask_app, db_uri=os.environ["POSTGRES_URI"], echo=False):
     db.init_app(flask_app)
     print("Connected to the db!")
 
+
+
 if __name__ == "__main__":
     from server import app
     connect_to_db(app)
+    

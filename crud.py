@@ -18,13 +18,15 @@ def get_user_by_id(user_id):
 def get_user_by_username(username):
     return User.query.get(username)
 
+def get_user_by_login(username, password):
+    return User.query.filter_by(username=username, password=password).first()
 
 """ Project related functions"""
-def create_project(name, description, status):
+def create_project(project_name, project_description, user_id):
     project = Project(
-        name = name,
-        description = description,
-        status = status,
+        project_name = project_name,
+        project_description = project_description,
+        user_id= user_id
     )
     return project
 
@@ -37,13 +39,15 @@ def get_project_by_id(project_id):
 def get_project_by_name(name):
     return Project.query.get(name)
 
+# def get_project_by_user(user)
 
 """Task related function"""
-def create_task(name, description, status):
+def create_task(task_name, task_description, status, project_id):
    task = Task(
-       name = name,
-       description = description,
-       status = status
+       task_name = task_name,
+       task_description = task_description,
+       status = status,
+       project_id = project_id
    ) 
    return task
 
