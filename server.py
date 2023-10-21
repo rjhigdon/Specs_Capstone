@@ -27,15 +27,18 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         login_user(user)
-        return redirect(url_for("projects"))
+        return redirect("/")
            
     return render_template("login.html", form=form)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-    if form.validate_on_submit():
+    if form.is_submitted():
         new_user = User(username=form.username.data, password=form.password.data)
+        print(form.username.data)
+        print(form.password.data)
+        print(new_user)
         db.session.add(new_user)
         db.session.commit()
     
