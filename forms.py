@@ -1,33 +1,25 @@
 from flask_wtf import FlaskForm
+from flask import flash
 from wtforms import StringField, PasswordField, SubmitField, SelectField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, InputRequired, ValidationError
 from model import User, Project, Task
 
 class RegisterForm(FlaskForm):
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-    def user_validate(self, username):
-        username_checker = User.query.filter_by(username = username.data).first()
-        
-        if username_checker:
-            raise ValidationError(
-                "That username already exists. Try again"
-            )
-            
-class LoginForm(FlaskForm):
     username = StringField("Username:", validators=[DataRequired()])
     password = PasswordField("Password:", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
     def user_validate(self, username):
-        username_checker = User.query.filter_by(username = username.data).first()
+        existing_username_query = User.query.filter_by(username = username.data).first()
         
-        if username_checker:
-            raise ValidationError(
-                "That username already exists. Try again"
-            )
+        if existing_username_query:
+            raise ValidationError("That username already exists. Try again")
+                    
+class LoginForm(FlaskForm):
+    username = StringField("Username:", validators=[DataRequired()])
+    password = PasswordField("Password:", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+    
 
 class ProjectForm(FlaskForm):
     project_name = StringField("Name:", validators=[DataRequired()])
@@ -44,6 +36,7 @@ class ProjectForm(FlaskForm):
 
 class TaskForm(FlaskForm):
     task_name = StringField("Name:")
-    description = StringField("description")
-    status = SelectField("status", choices=[('Backlog', 'Backlog'), ('To-Do', 'To-Do'), ('In-Progress', 'In-Progress'), ('Done', 'Done')])
+    task_description = StringField("description")
+    status = SelectField("status", choices=[('Backlog', 'Backlog'), ('To-Do', 'To-Do'), ('In-Progress', 'In-Progress'), ('Completed', 'Completed')])
+    submit=SubmitField("Submit")
     

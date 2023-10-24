@@ -36,7 +36,7 @@ with server.app.app_context():
 #Creates 1000 tasks randomly assigned to a project and status        
     for _ in range (1000):
         
-        statuses = ['Backlog', 'To-do', 'In-progress', 'Completed']
+        statuses = ['Backlog', 'To-Do', 'In-Progress', 'Completed']
         
         task_name = fake.text(10)
         task_description = fake.text(100)

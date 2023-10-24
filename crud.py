@@ -1,4 +1,5 @@
 from model import User, Project, Task, connect_to_db
+from flask_login import current_user
 
 
 """User related functions"""
@@ -39,7 +40,9 @@ def get_project_by_id(project_id):
 def get_project_by_name(name):
     return Project.query.get(name)
 
-# def get_project_by_user(user)
+def current_user_projects(id):
+    return Project.query.filter(Project.user_id == id)
+    
 
 """Task related function"""
 def create_task(task_name, task_description, status, project_id):

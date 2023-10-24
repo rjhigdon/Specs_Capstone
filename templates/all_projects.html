@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Projects{% endblock %}
+{% block head %}
+<p>Current Projects</p>
+{% endblock %}
+
+{% block body %}
+<ul>
+    {% for projects in results %}
+    <li>
+        <a href="/projects/{{ projects.project_id }}">Project: {{ projects.project_name }}</a>
+        <a href="/project_delete/{{ projects.project_id }}"><button>x</button></a>
+    </li>
+    {% endfor %}
+</ul>
+    <br>
+    <br>
+<form action="/projects" method="POST">
+
+    <p> Add a New Project </p>
+    <p>
+        {{ form.project_name.label }} <br>
+        {{ form.project_name(size=30) }}
+    </p>
+    <p>
+        {{ form.project_description.label }} <br>
+        {{ form.project_description(size=30) }}
+    </p>
+    <p>
+        {{ form.submit }}
+    </p>
+</form>
+
+{% endblock body %}
