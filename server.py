@@ -2,14 +2,13 @@ from forms import RegisterForm, LoginForm, ProjectForm,TaskForm
 from model import db, User, Project, Task, connect_to_db
 from crud import current_user_projects
 
-from flask import (Flask, render_template, flash, redirect)
+from flask import (Flask, render_template, flash, redirect, request)
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from jinja2 import StrictUndefined
 
 app = Flask(__name__)
 app.secret_key = "supa dupa secret"
 app.jinja_env.undefined = StrictUndefined
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -27,14 +26,14 @@ def homepage():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-    if form.validate_on_submit():
+    if request.method == 'POST' and form.validate_on_submit():
         new_user = User(username=form.username.data, password=form.password.data)
-        flash(f"User: {form.username.data} successfully registered")
         db.session.add(new_user)
         db.session.commit()
-        return redirect("/login")
-    else:
-        flash("That username already exists. Try another")
+        flash(f"User: {form.username.data} successfully registered")
+
+    if request.method == 'GET':
+        flash('', f"User: {form.username.data} already")
     
     return render_template("register.html", form=form)
     
@@ -91,7 +90,9 @@ def project(project_id):
         return redirect("/projects/{0}".format(project_id))
     
     current_project_tasks = current_project.tasks
-    
+    current_project_desc = current_project.project_description
+    current_project_name = current_project.project_name
+        
     if current_project.tasks:
         tasks_for_backlog = current_project.tasks
         backlog_tasks = []
@@ -117,10 +118,10 @@ def project(project_id):
             if tasks.status=="Completed":
                 completed_tasks.append(tasks)
         
-        return render_template("project.html", project=Project, tasks=tasks, backlog_tasks=backlog_tasks, todo_tasks=todo_tasks, in_progress_tasks=in_progress_tasks, completed_tasks=completed_tasks, current_project_tasks=current_project_tasks, form=form)
+        return render_template("project.html", project=Project, tasks=tasks, backlog_tasks=backlog_tasks, todo_tasks=todo_tasks, in_progress_tasks=in_progress_tasks, completed_tasks=completed_tasks, current_project_tasks=current_project_tasks, current_project_desc=current_project_desc, current_project_name=current_project_name,form=form)
     
     else:
-        return render_template("project.html", project=Project, current_project_tasks=current_project_tasks, form=form)
+        return render_template("project.html", project=Project, current_project_tasks=current_project_tasks, current_project_desc=current_project_desc, current_project_name=current_project_name, form=form)
 
 @app.route("/Backlog/<task_id>")  
 def backlog_update(task_id):

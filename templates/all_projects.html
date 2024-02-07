@@ -1,31 +1,36 @@
 {% extends "base.html" %}
 
 {% block title %}Projects{% endblock %}
-{% block head %}
-<p>Current Projects</p>
+
+{% block header %}
+<img src="static\Logo.png">
+<div id="hyper-links">
+    <a class="hyperlink" href="{{ url_for('logout') }}"><img src="static\Register Image.png"></a>
+</div>
 {% endblock %}
 
 {% block body %}
-<ul>
+
+    <h3>Current Projects</h3>
     {% for projects in results %}
-    <li>
-        <a href="/projects/{{ projects.project_id }}">Project: {{ projects.project_name }}</a>
-        <a href="/project_delete/{{ projects.project_id }}"><button>x</button></a>
+    <li class="projects-tile">
+        <a href="/projects/{{ projects.project_id }}"id="project-link"> {{ projects.project_name }}</a>
+        <a href="/project_delete/{{ projects.project_id }}"><button class="delete-btn">x</button></a>
     </li>
-    {% endfor %}
-</ul>
+
+{% endfor %}
     <br>
     <br>
-<form action="/projects" method="POST">
+<form class="add-form" id ="project-form" action="/projects" method="POST">
 
     <p> Add a New Project </p>
     <p>
         {{ form.project_name.label }} <br>
-        {{ form.project_name(size=30) }}
+        {{ form.project_name(size=30, autocomplete="off") }}
     </p>
     <p>
         {{ form.project_description.label }} <br>
-        {{ form.project_description(size=30) }}
+        {{ form.project_description(size=30, autocomplete="off") }}
     </p>
     <p>
         {{ form.submit }}

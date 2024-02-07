@@ -9,9 +9,9 @@
       </title>
 </head>
 <body>
-  
-      {% block head %}{% endblock %}
-    </head>
+    <header>
+      {% block header %}{% endblock %}
+    </header>
     <body>
       {% for msg in get_flashed_messages() %}
         <p class="flask-msg">

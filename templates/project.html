@@ -1,53 +1,71 @@
 {% extends "base.html" %}
 
+{% block header %}
+<img src="{{ url_for('static', filename='Logo.png' ) }}">
+<div id="hyper-links">
+    <a class="hyperlink" href="{{ url_for('logout') }}"><img src="{{ url_for('static', filename='Logout.png' ) }}"></a>
+</div>
+{% endblock %}
+
 {% block body %}
+    <h5>
+        {{ current_project_name }}          
+    </h5>
+    <br>
+    <h6>
+        {{ current_project_desc }} 
+    </h6>
 
 {% if current_project_tasks: %}
 <div id="task-container">
 
     <ul class="task_list" id="backlog_tasks">
-    {% for tasks in backlog_tasks %}
+        <h4>Backlog</h4>
+        {% for tasks in backlog_tasks %}
         <li>
-            Task: {{ tasks.task_name }} Status: {{ tasks.status }}
-            <a href="/To-Do/{{ tasks.task_id }}"> <button id="right"> -> </button></a>
-            <a href="/delete/ {{ tasks.task_id }}"><button>x</button></a>
+            <p> {{ tasks.task_name }}</p>
+            <a href="/To-Do/{{ tasks.task_id }}"> <button id="right" class="arrow-btn"> -> </button> </a>
+            <a href="/delete/ {{ tasks.task_id }}"> <button class="delete-btn">x</button> </a>
         </li>
     {% endfor %}
     </ul>
 
     <ul class="task_list" id="todo_tasks">
+        <h4>To-Do</h4>
     {% for tasks in todo_tasks %}
-        <li>
-            <a href="/Backlog/{{ tasks.task_id }}"><button> <- </button></a> 
-            Task: {{ tasks.task_name }} Status: {{ tasks.status }}
-            <a href="/In-Progress/{{ tasks.task_id }}"><button> -> </button></a>
-            <a href="/delete/ {{ tasks.task_id }}"><button>x</button></a>
+    <li>
+        <a href="/Backlog/{{ tasks.task_id }}"><button class="arrow-btn"> <- </button></a> 
+        <p> {{ tasks.task_name }} </p>   
+        <a href="/In-Progress/{{ tasks.task_id }}"><button class="arrow-btn"> -> </button></a>
+        <a href="/delete/ {{ tasks.task_id }}"><button class="delete-btn">x</button></a>
         </li>
     {% endfor %}
     </ul>
 
     <ul class="task_list" id="in_progress_tasks">
+    <h4>In-Progress</h4>
     {% for tasks in in_progress_tasks %}
         <li>
-            <a href="/To-Do/{{ tasks.task_id }}"><button> <- </button></a>
-            Task: {{ tasks.task_name }} Status: {{ tasks.status }}
-            <a href="/Completed/{{ tasks.task_id }}"><button> -> </button></a>
-            <a href="/delete/ {{ tasks.task_id }}"><button>x</button></a>
+            <a href="/To-Do/{{ tasks.task_id }}"><button class="arrow-btn"> <- </button></a>
+            {{ tasks.task_name }} 
+            <a href="/Completed/{{ tasks.task_id }}"><button class="arrow-btn"> -> </button></a>
+            <a href="/delete/ {{ tasks.task_id }}"><button class="delete-btn">x</button></a>
         </li>
         {% endfor %}
     </ul>
     
     <ul class="task_list" id="completed_tasks">
+        <h4>Completed</h4>
         {% for tasks in completed_tasks %}
         <li>
-            <a href="/In-Progress/{{ tasks.task_id }}"><button> <- </button></a>
-            Task: {{ tasks.task_name }} Status: {{ tasks.status }}
-            <a href="/delete/ {{ tasks.task_id }}"><button>x</button></a>
+            <a href="/In-Progress/{{ tasks.task_id }}"><button class="arrow-btn"> <- </button></a>
+            {{ tasks.task_name }}
+            <a href="/delete/ {{ tasks.task_id }}"><button class="delete-btn">x</button></a>
         </li>
         {% endfor %}
     </ul>
 </div>
-    <form action="" method="POST">
+    <form class="add-form" id="task-form" action="" method="POST">
         <p>Add a New Task:</p>
         <p>
             {{ form.task_name.label }}<br>
@@ -68,20 +86,19 @@
     
 
 {% else %}
-<p>no tasks yet </p>
-<form action="" method="POST">
+<form class="add-form" id="task-form" action="" method="POST">
     <p>Add a New Task:</p>
     <p>
         {{ form.task_name.label }}<br>
-        {{ form.task_name(size=30) }}
+        {{ form.task_name(size=30, autocomplete="off") }}
     </p>
     <p>
         {{ form.task_description.label }}<br>
-        {{ form.task_description(size=30) }}
+        {{ form.task_description(size=30, autocomplete="off") }}
     </p>
     <p>
         {{ form.status.label }}<br>
-        {{ form.status(size=30) }}
+        {{ form.status(size=30, id="dropdown") }}
     </p>
     <p>
         {{ form.submit}}

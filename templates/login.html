@@ -1,26 +1,30 @@
 {% extends "base.html" %}
 {% block title %} Login {% endblock %}
-
+{% block header %}
+<img src="static\Logo.png">
+<div id="hyper-links">
+    <a class="hyperlink" id="register-redirect"href="{{ url_for('register') }}"><img src="static\Register Image.png"></a>
+</div>
+{% endblock %}
 {% block body %}
 
-<h2> Log In </h2>
 
-<form action="/login" method="POST">
+
+<form id="login-form" action="/login" method="POST">
+    <h2> Log In </h2>
     <p>
         {{ form.csrf_token() }}
         {{ form.username.label }} <br>
-        {{ form.username(size=30)}}
+        {{ form.username(size=30, autocomplete="off")}}
     </p>
     <p>
         {{ form.password.label }} <br>
-        {{ form.password(size=30)}}
+        {{ form.password(size=30, autocomplete="off")}}
     </p>
     <p>
         {{ form.submit }}
     </p>
 </form>
-<a href="{{ url_for('homepage') }}">Home</a>
-<a href="{{ url_for('register') }}">Dont have an account? Sign Up</a>
 
 
 {% endblock %}
